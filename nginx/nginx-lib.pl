@@ -1557,6 +1557,7 @@ sub update_last_config_change
 {
 &open_lock_tempfile(my $fh, ">$last_config_change_flag", 0, 1);
 &close_tempfile($fh);
+&unlock_file($last_config_change_flag);
 }
 
 # update_last_restart_time()
@@ -1565,6 +1566,7 @@ sub update_last_restart_time
 {
 &open_lock_tempfile(my $fh, ">$last_restart_time_flag", 0, 1);
 &close_tempfile($fh);
+&unlock_file($last_restart_time_flag);
 }
 
 # needs_config_restart()
