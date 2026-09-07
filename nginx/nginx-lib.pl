@@ -731,13 +731,15 @@ sub join_words
 {
 my @rv;
 foreach my $w (@_) {
+	# Quote words with spaces, separators, variables or a # comment marker
+	my $quote = $w =~ /\s|;|\$/ && $w !~ /^\$/ || $w =~ /#/;
 	if ($w eq "") {
 		push(@rv, '""');
 		}
-	elsif ($w =~ /\s|;|\$/ && $w !~ /"/ && $w !~ /^\$/) {
+	elsif ($quote && $w !~ /"/) {
 		push(@rv, "\"$w\"");
 		}
-	elsif ($w =~ /\s|;|\$/ && $w !~ /^\$/) {
+	elsif ($quote) {
 		push(@rv, "'$w'");
 		}
 	else {
