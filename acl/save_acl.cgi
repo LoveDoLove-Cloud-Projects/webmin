@@ -10,6 +10,7 @@ require './acl-lib.pl';    ## no critic
 our (%in, %text, %config, %access, $base_remote_user, %gconfig,
      $config_directory);
 &ReadParse();
+$access{'acl'} || &error($text{'acl_emod'});
 
 my $who;
 if ($in{'_acl_group'}) {
