@@ -1120,9 +1120,7 @@ while(1) {
 				local $session_id = $1;
 				local $vip = $2;
 				local $uptime = $3;
-				local $skey = $sessiondb{$session_id} ?
-						$session_id : 
-						&hash_session_id($session_id);
+				local $skey = &hash_session_id($session_id);
 				if (!defined($sessiondb{$skey})) {
 					# Session doesn't exist
 					print $outfd "0 0\n";
@@ -1174,9 +1172,7 @@ while(1) {
 			elsif ($inline =~ /^delete\s+(\S+)/) {
 				# Logging out a session
 				local $session_id = $1;
-				local $skey = $sessiondb{$session_id} ?
-						$session_id : 
-						&hash_session_id($session_id);
+				local $skey = &hash_session_id($session_id);
 				local ($user, $ltime, $ip) =
 					split(/\s+/, $sessiondb{$skey});
 				$user =~ s/^\!//;
