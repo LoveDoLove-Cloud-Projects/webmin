@@ -1110,10 +1110,9 @@ foreach my $fref (@{$files_to_extract}) {
 			my $uu = ($unzip_out =~ /-UU/
 				? '-UU' : undef);
 			$status = system(
-				"$unzip_cmd $uu -q -o " .
-				quotemeta($archive) .
-				" -d " .
-				quotemeta($extract_to));
+				"$unzip_cmd $uu -q -o".
+				" -d " .quotemeta($extract_to).
+				" -- ".quotemeta($archive));
 			}
 		}
 	elsif ($archive_type =~ /\/x-rar|\/vnd\.rar/) {

@@ -42,7 +42,7 @@ elsif ($in{'method'} eq 'zip') {
 	$extension = ".zip";
 	$full = &validate_filename_path($in{'arch'}.$extension);
 	$command = "cd ".quotemeta($cwd).
-		" && zip -r ".quotemeta($full);
+		" && zip -r -- ".quotemeta($full);
 	}
 else {
 	&error("Unknown method!");
