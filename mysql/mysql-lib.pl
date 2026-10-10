@@ -1014,16 +1014,18 @@ if ($config{'webmin_subs'}) {
 return $rv;
 }
 
-# execute_before(db, handle, escape, path, db-for-config)
+# execute_before(db, handle, escape, path, db-for-config, [&as-user])
 # Executes the before-backup command for some DB, and sends output to the
 # given file handle. Returns 1 if the command succeeds, or 0 on failure
 sub execute_before
 {
-my ($db, $h, $escape, $path, $db) = @_;
+my ($db, $h, $escape, $path, $db, $asuser) = @_;
 my $cmd = $config{'backup_before_'.$db};
 if ($cmd) {
 	$ENV{'BACKUP_FILE'} = $path;
 	my $out;
+	$cmd = &command_as_user($asuser, 0, $cmd)
+		if ($asuser && $asuser ne "root");
 	my $rv = &execute_command($cmd, undef, \$out, \$out);
 	if ($h && $out) {
 		print $h $escape ? "<pre>".&html_escape($out)."</pre>" : $out;
@@ -1033,16 +1035,18 @@ if ($cmd) {
 return 1;
 }
 
-# execute_after(db, handle, escape, path, db-for-config)
+# execute_after(db, handle, escape, path, db-for-config, [&as-user])
 # Executes the after-backup command for some DB, and sends output to the
 # given file handle. Returns 1 if the command succeeds, or 0 on failure
 sub execute_after
 {
-my ($db, $h, $escape, $path, $db) = @_;
+my ($db, $h, $escape, $path, $db, $asuser) = @_;
 my $cmd = $config{'backup_after_'.$_[4]};
 if ($cmd) {
 	$ENV{'BACKUP_FILE'} = $path;
 	my $out;
+	$cmd = &command_as_user($asuser, 0, $cmd)
+		if ($asuser && $asuser ne "root");
 	my $rv = &execute_command($cmd, undef, \$out, \$out);
 	if ($h && $out) {
 		print $h $escape ? "<pre>".&html_escape($out)."</pre>" : $out;

@@ -151,7 +151,8 @@ if (!$in{'save'}) {
 	@dbs = $in{'all'} ? @alldbs : ( $in{'db'} );
 	if ($cmode == 1) {
 		# Run and check before-backup command (for all DBs)
-		$bok = &execute_before(undef, STDOUT, 1, $in{'file'}, undef);
+		$bok = &execute_before(undef, STDOUT, 1, $in{'file'}, undef,
+				       $access{'buser'});
 		if (!$bok) {
 			print "$main::whatfailed : ",
 			      $text{'backup_ebefore'},"<p>\n";
@@ -195,7 +196,8 @@ if (!$in{'save'}) {
 		if ($cron && $cmode == 0) {
 			# Run and check before-backup command (for one DB)
 			$bok = &execute_before($db, STDOUT, 1, $file,
-					       $in{'all'} ? undef : $db);
+					       $in{'all'} ? undef : $db,
+					       $access{'buser'});
 			if (!$bok) {
 				print $text{'backup_ebefore'},"<p>\n";
 				next;
@@ -216,7 +218,8 @@ if (!$in{'save'}) {
 			print &text('backup_done', "<tt>$db</tt>",
 				    "<tt>$file</tt>", int($st[7])),"<p>\n";
 			}
-		&execute_after($db, STDOUT, 1, $file, $in{'all'} ? undef : $db)
+		&execute_after($db, STDOUT, 1, $file, $in{'all'} ? undef : $db,
+			       $access{'buser'})
 			if ($cron && $cmode == 0);
 
 		if ($in{'dest'}) {
@@ -229,7 +232,8 @@ if (!$in{'save'}) {
 			&unlink_file($file);
 			}
 		}
-	&execute_after(undef, STDOUT, 1, $in{'file'}, undef) if ($cmode == 1);
+	&execute_after(undef, STDOUT, 1, $in{'file'}, undef,
+		       $access{'buser'}) if ($cmode == 1);
 	donebackup:
 	}
 
