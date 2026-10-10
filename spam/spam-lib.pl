@@ -1034,15 +1034,23 @@ return $awp;
 # 0 if it could not be opened, or -1 if empty.
 sub open_auto_whitelist_dbm
 {
-local ($user) = @_;
-local $awp = &get_auto_whitelist_file($user);
+my ($user) = @_;
+my $awp = &get_auto_whitelist_file($user);
 return 0 if (!$awp);
 local $anyok;
 foreach my $cls ('DB_File', 'GDBM_File', 'SDBM_File') {
 	$@ = undef;
 	eval "use $cls";
 	next if ($@);
-	tie(%awl, $cls, $awp, O_RDWR, 0755) || next;
+	my $ok;
+	if ($user && $user ne "root") {
+		$ok = &eval_as_unix_user($user, 
+			sub { return tie(%awl, $cls, $awp, O_RDWR, 0755) });
+		}
+	else {
+		$ok = tie(%awl, $cls, $awp, O_RDWR, 0755);
+		}
+	next if (!$ok);
 	if (scalar(keys %awl)) {
 		return 1;
 		}
