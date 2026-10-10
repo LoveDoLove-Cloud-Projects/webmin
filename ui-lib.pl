@@ -1129,14 +1129,15 @@ if ($bytes ne "") {
 	$bytes =~ s/(\.\d*?[1-9])0+$/$1/;
 	}
 $size = &ui_max_text_width($size || 8);
-return &ui_textbox($name, $bytes, $size, $dis, undef, $tags)." ".
+return &ui_tag('span',
+       &ui_textbox($name, $bytes, $size, $dis, undef, $tags)." ".
        &ui_select($name."_units", $units,
 		 [ [ 1, $text{"nice_size_b"} ],
 		   [ 1024, $text{"nice_size_kiB"} ],
 		   [ 1024*1024, $text{"nice_size_MiB"} ],
 		   [ 1024*1024*1024, $text{"nice_size_GiB"} ],
 		   [ 1024*1024*1024*1024, $text{"nice_size_TiB"} ],
-		   [ 1024*1024*1024*1024*1024, $text{"nice_size_PiB"} ] ], undef, undef, undef, $dis);
+		   [ 1024*1024*1024*1024*1024, $text{"nice_size_PiB"} ] ], undef, undef, undef, $dis), { class => 'ui_bytesbox' });
 }
 
 =head2 ui_upload(name, size, [disabled?], [tags])
