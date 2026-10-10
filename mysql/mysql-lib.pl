@@ -1019,8 +1019,8 @@ return $rv;
 # given file handle. Returns 1 if the command succeeds, or 0 on failure
 sub execute_before
 {
-my ($db, $h, $escape, $path, $db, $asuser) = @_;
-my $cmd = $config{'backup_before_'.$db};
+my ($db, $h, $escape, $path, $dbconf, $asuser) = @_;
+my $cmd = $config{'backup_before_'.$dbconf};
 if ($cmd) {
 	$ENV{'BACKUP_FILE'} = $path;
 	my $out;
@@ -1040,8 +1040,8 @@ return 1;
 # given file handle. Returns 1 if the command succeeds, or 0 on failure
 sub execute_after
 {
-my ($db, $h, $escape, $path, $db, $asuser) = @_;
-my $cmd = $config{'backup_after_'.$_[4]};
+my ($db, $h, $escape, $path, $dbconf, $asuser) = @_;
+my $cmd = $config{'backup_after_'.$dbconf};
 if ($cmd) {
 	$ENV{'BACKUP_FILE'} = $path;
 	my $out;
