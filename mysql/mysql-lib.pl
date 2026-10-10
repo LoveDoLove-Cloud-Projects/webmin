@@ -1019,14 +1019,14 @@ return $rv;
 # given file handle. Returns 1 if the command succeeds, or 0 on failure
 sub execute_before
 {
-local $cmd = $config{'backup_before_'.$_[4]};
+my ($db, $h, $escape, $path, $db) = @_;
+my $cmd = $config{'backup_before_'.$db};
 if ($cmd) {
-	$ENV{'BACKUP_FILE'} = $_[3];
-	local $h = $_[1];
-	local $out;
-	local $rv = &execute_command($cmd, undef, \$out, \$out);
+	$ENV{'BACKUP_FILE'} = $path;
+	my $out;
+	my $rv = &execute_command($cmd, undef, \$out, \$out);
 	if ($h && $out) {
-		print $h $_[2] ? "<pre>".&html_escape($out)."</pre>" : $out;
+		print $h $escape ? "<pre>".&html_escape($out)."</pre>" : $out;
 		}
 	return !$rv;
 	}
@@ -1034,16 +1034,18 @@ return 1;
 }
 
 # execute_after(db, handle, escape, path, db-for-config)
+# Executes the after-backup command for some DB, and sends output to the
+# given file handle. Returns 1 if the command succeeds, or 0 on failure
 sub execute_after
 {
-local $cmd = $config{'backup_after_'.$_[4]};
+my ($db, $h, $escape, $path, $db) = @_;
+my $cmd = $config{'backup_after_'.$_[4]};
 if ($cmd) {
-	$ENV{'BACKUP_FILE'} = $_[3];
-	local $h = $_[1];
-	local $out;
-	local $rv = &execute_command($cmd, undef, \$out, \$out);
+	$ENV{'BACKUP_FILE'} = $path;
+	my $out;
+	my $rv = &execute_command($cmd, undef, \$out, \$out);
 	if ($h && $out) {
-		print $h $_[2] ? "<pre>".&html_escape($out)."</pre>" : $out;
+		print $h $escape ? "<pre>".&html_escape($out)."</pre>" : $out;
 		}
 	return !$rv;
 	}
